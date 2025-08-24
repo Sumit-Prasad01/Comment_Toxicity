@@ -1,0 +1,26 @@
+# Core
+numpy
+pandas
+scikit-learn
+
+# Deep Learning (TensorFlow + Keras)
+tensorflow
+keras
+
+# Hugging Face - BERT
+transformers
+datasets
+sentencepiece
+tokenizers
+
+# Visualization & Metrics
+matplotlib
+seaborn
+
+# Web App
+streamlit
+
+# Utilities
+tqdm
+joblib
+protobuf
