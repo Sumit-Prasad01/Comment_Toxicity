@@ -1,26 +1,26 @@
 # Core
-numpy
-pandas
-scikit-learn
+numpy==1.26.4
+pandas==2.2.2
+scikit-learn==1.5.2
 
 # Deep Learning (TensorFlow + Keras)
-tensorflow
-keras
+tensorflow==2.17.0
+keras==3.5.0
 
 # Hugging Face - BERT
-transformers
-datasets
-sentencepiece
-tokenizers
+transformers==4.44.2
+tokenizers==0.19.1
+datasets==2.21.0
+sentencepiece==0.2.0
 
 # Visualization & Metrics
-matplotlib
-seaborn
+matplotlib==3.9.2
+seaborn==0.13.2
 
 # Web App
-streamlit
+streamlit==1.38.0
 
 # Utilities
-tqdm
-joblib
-protobuf
+tqdm==4.66.5
+joblib==1.4.2
+protobuf==4.25.3
