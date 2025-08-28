@@ -20,5 +20,6 @@ plt.axvline(df["token_length"].quantile(0.95), color="red", linestyle="--", labe
 plt.xlabel("Token Length")
 plt.ylabel("Count")
 plt.title("Distribution of Token Lengths")
+plt.savefig("Reports/Visuals/Distribution of Token Lengths.png")
 plt.legend()
 plt.show()

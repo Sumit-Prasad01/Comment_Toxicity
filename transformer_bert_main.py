@@ -1,10 +1,10 @@
 import argparse
 import os
 import tensorflow as tf
-from src.train import train_model
-from src.evaluate import evaluate_model
-from src.data_prep import load_and_prepare
-from src.model import create_model
+from transformer_pipeline.train import train_model
+from transformer_pipeline.evaluate import evaluate_model
+from transformer_pipeline.data_prep import load_and_prepare
+from transformer_pipeline.model import create_model
 
 
 def get_first_existing_path(possible_paths):
