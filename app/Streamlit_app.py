@@ -32,7 +32,7 @@ def main():
 
     # Load model + tokenizer
     model, tokenizer = load_model_and_tokenizer(
-        "../models/glove_lstm_final.keras", "../models/tokenizer.pkl"
+        "../models/glove_lstm_model.keras", "../models/tokenizer.pkl"
     )
 
     user_input = st.text_area("💬 Enter a comment:")
