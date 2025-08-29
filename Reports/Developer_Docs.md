@@ -1,4 +1,7 @@
 # Toxic Comment Classification (LSTM + GloVe) – Developer Documentation
+
+## GitHub Link - https://github.com/Sumit-Prasad01/Comment_Toxicity
+
 ## 📌 Overview
 
 ### This project builds and deploys a Toxic Comment Classification system using:
