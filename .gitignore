@@ -144,3 +144,5 @@ data/
 glove/
 *.txt
 models/
+
+*.csv
