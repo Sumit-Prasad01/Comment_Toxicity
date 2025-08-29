@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import tensorflow as tf
+import pickle
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.models import Sequential
@@ -95,8 +96,9 @@ def build_lstm_model(max_words, max_len, embedding_dim, embedding_matrix, num_la
 
 
 # -------------------------
-# Train Model (example usage)
+# Train Model 
 # -------------------------
+
 def train_pipeline(train_path, test_path, glove_path, label_cols,
                    max_words=50000, max_len=320, embedding_dim=100,
                    batch_size=128, epochs=5):
@@ -115,7 +117,7 @@ def train_pipeline(train_path, test_path, glove_path, label_cols,
     # Callbacks (early stopping + save best model)
     callbacks = [
         EarlyStopping(monitor="val_loss", patience=2, restore_best_weights=True),
-        ModelCheckpoint("models/glove_lstm_best.keras", save_best_only=True)
+        ModelCheckpoint("../models/glove_lstm_best.keras", save_best_only=True)
     ]
 
     # Train
@@ -129,6 +131,11 @@ def train_pipeline(train_path, test_path, glove_path, label_cols,
 
     # Save final model
     model.save("../models/glove_lstm_final.keras")
-    print("Model training complete and saved.")
+    print(" Model training complete and saved.")
+
+    # Save tokenizer
+    with open("../models/tokenizer.pkl", "wb") as f:
+        pickle.dump(tokenizer, f)
+    print(" Tokenizer saved.")
 
     return model, history, (X_test, y_test, tokenizer)
