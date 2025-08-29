@@ -15,8 +15,10 @@ glove_path = "glove.6B.100d.txt"
 label_cols = ["toxic", "severe_toxic", "obscene", "threat", "insult", "identity_hate"]
 
 max_words = 50000
-max_len = 256
+max_len = 320
 embedding_dim = 100
+batch_size = 128
+epochs = 5
 
 # -------------------------
 # Pipeline
@@ -36,7 +38,7 @@ model = build_lstm_model(
 
 print("Training...")
 history = model.fit(
-    X_train, y_train, batch_size=128, epochs=5, validation_split=0.1
+    X_train, y_train, batch_size=batch_size, epochs=epochs, validation_split=0.1
 )
 
 # -------------------------
@@ -61,22 +63,27 @@ try:
     loaded_model = keras.saving.load_model(keras_path)
     print("Loaded .keras model")
 except Exception as e:
-    print("Failed to load .keras model, trying .h5 instead...", e)
+    print(f"Failed to load .keras model → trying .h5 instead. Error: {e}")
     import tensorflow as tf
     loaded_model = tf.keras.models.load_model(h5_path)
     print("Loaded .h5 model")
 
+# -------------------------
+# Evaluation
+# -------------------------
 if y_test is not None:
     print("\nRunning evaluation on test set...")
-    preds = loaded_model.predict(X_test, batch_size=128)
+    preds = loaded_model.predict(X_test, batch_size=batch_size)
     preds_binary = (preds > 0.5).astype(int)
 
     # Classification Report
     print("\nClassification Report:")
-    print(classification_report(y_test, preds_binary, target_names=label_cols))
+    print(classification_report(y_test, preds_binary, target_names=label_cols, zero_division=0))
 
     # Confusion Matrices
-    os.makedirs("reports/visuals", exist_ok=True)
+    output_dir = "reports/visuals"
+    os.makedirs(output_dir, exist_ok=True)
+
     for i, label in enumerate(label_cols):
         cm = confusion_matrix(y_test[:, i], preds_binary[:, i])
         plt.figure(figsize=(4, 3))
@@ -84,10 +91,23 @@ if y_test is not None:
         plt.title(f"Confusion Matrix - {label}")
         plt.xlabel("Predicted")
         plt.ylabel("Actual")
-        save_path = f"Reports/Visuals/confusion_matrix_{label}.png"
+        save_path = os.path.join(output_dir, f"confusion_matrix_{label}.png")
         plt.savefig(save_path, bbox_inches="tight")
         plt.close()
-        print(f"Saved confusion matrix for {label} at {save_path}")
+        print(f"Saved confusion matrix for '{label}' at {save_path}")
 
 else:
-    print("Test labels not found. Skipping evaluation.")
+    print("No test labels found → skipping evaluation. Only predictions will be generated.")
+    preds = loaded_model.predict(X_test, batch_size=batch_size)
+    preds_binary = (preds > 0.5).astype(int)
+
+    # Save predictions
+    import pandas as pd
+    test_df = pd.read_csv(test_path)
+    for i, col in enumerate(label_cols):
+        test_df[f"pred_{col}"] = preds_binary[:, i]
+
+    os.makedirs("reports/predictions", exist_ok=True)
+    save_path = "reports/predictions/test_predictions.csv"
+    test_df.to_csv(save_path, index=False)
+    print(f"Predictions saved at {save_path}")
